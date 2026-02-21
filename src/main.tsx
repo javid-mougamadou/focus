@@ -2,9 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { initGA } from './utils/analytics';
+// import { initGA } from './utils/analytics';
 
-void initGA();
+// void initGA();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
