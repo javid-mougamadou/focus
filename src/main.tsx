@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import { initGA } from './utils/analytics';
 
-initGA();
+void initGA();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
