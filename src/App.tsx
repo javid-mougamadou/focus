@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header, Footer, TaskForm, TaskTimer } from './components';
 import { useTheme } from './hooks/useTheme';
+import { usePageTracking } from './hooks/useAnalytics';
 import { usePersistentState } from './hooks/usePersistentState';
 import { clearTimerStorage } from './hooks/useTimer';
 import type { Task } from './types';
@@ -10,6 +11,7 @@ const LAST_DURATION_KEY = 'focus.last-duration-v1';
 
 const App = () => {
   const { theme, toggleTheme } = useTheme();
+  usePageTracking('/', 'Focus | Javid Mougamadou');
   const [task, setTask, clearTask] = usePersistentState<Task | null>({
     key: TASK_STORAGE_KEY,
     defaultValue: null,

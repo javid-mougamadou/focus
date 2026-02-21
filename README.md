@@ -11,6 +11,16 @@ npm run dev
 
 Then open `http://localhost:5173`.
 
+### Google Analytics
+
+Create a `.env` file with your GA4 Measurement ID:
+
+```bash
+VITE_GA_MEASUREMENT_ID=G-GM8TH3PZKZ
+```
+
+Google Analytics is only enabled in production builds. For GitHub Actions, add `VITE_GA_MEASUREMENT_ID` as a repository secret.
+
 ### With Docker
 
 ```bash

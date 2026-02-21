@@ -66,6 +66,7 @@ jobs:
           GITHUB_PAGES: 'true'
           CUSTOM_DOMAIN: 'true'
           GITHUB_REPOSITORY: ${{ github.repository }}
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
         run: npm run build
 
       - name: Setup Pages
