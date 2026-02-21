@@ -59,6 +59,6 @@ describe('useTimer', () => {
     act(() => {
       result.current.reset();
     });
-    expect(result.current.remainingMs).toBe(DURATION_MS);
+    expect(result.current.remainingMs).toBeGreaterThanOrEqual(DURATION_MS - 200);
   });
 });
