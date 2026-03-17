@@ -1,6 +1,7 @@
-import { SunIcon, MoonIcon, MenuIcon } from './icons';
+import { SunIcon, MoonIcon, MenuIcon, DownloadIcon } from './icons';
 import { THEME_ICON_COLORS, THEME_TEXT_COLORS } from '../constants';
 import type { Theme } from '../constants';
+import { useRef } from 'react';
 
 type HeaderProps = {
   theme: Theme;
@@ -48,6 +49,11 @@ const ThemeMenuButton = ({ theme, onToggleTheme }: { theme: Theme; onToggleTheme
 const Header = ({ theme, onToggleTheme }: HeaderProps) => {
   const textColor = THEME_TEXT_COLORS[theme];
   const iconColor = THEME_ICON_COLORS[theme];
+  const installDialogRef = useRef<HTMLDialogElement | null>(null);
+
+  const openInstallDialog = () => {
+    installDialogRef.current?.showModal();
+  };
 
   return (
     <header className="navbar fixed top-0 z-50 w-full bg-transparent backdrop-blur-sm">
@@ -58,7 +64,15 @@ const Header = ({ theme, onToggleTheme }: HeaderProps) => {
           </a>
         </div>
 
-        <div className="hidden flex-none md:block">
+        <div className="hidden flex-none items-center gap-1 md:flex">
+          <button
+            type="button"
+            className="btn btn-circle btn-ghost"
+            onClick={openInstallDialog}
+            aria-label="Install app"
+          >
+            <DownloadIcon className={iconColor} />
+          </button>
           <ThemeIconButton theme={theme} onToggleTheme={onToggleTheme} />
         </div>
 
@@ -71,11 +85,52 @@ const Header = ({ theme, onToggleTheme }: HeaderProps) => {
             className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow-lg"
           >
             <li>
+              <button type="button" onClick={openInstallDialog} className="flex items-center justify-between">
+                <span>Install app</span>
+                <DownloadIcon className={iconColor} size="sm" />
+              </button>
+            </li>
+            <li>
               <ThemeMenuButton theme={theme} onToggleTheme={onToggleTheme} />
             </li>
           </ul>
         </div>
       </div>
+
+      <dialog ref={installDialogRef} className="modal">
+        <div className="modal-box">
+          <h3 className="text-lg font-bold">Install Focus</h3>
+          <div className="mt-3 space-y-4 text-sm">
+            <div>
+              <div className="font-semibold">iPhone / iPad (Safari)</div>
+              <ol className="mt-1 list-decimal space-y-1 pl-4">
+                <li>Open this site in Safari.</li>
+                <li>Tap the Share button.</li>
+                <li>Select “Add to Home Screen”.</li>
+              </ol>
+            </div>
+            <div>
+              <div className="font-semibold">Android (Chrome)</div>
+              <ol className="mt-1 list-decimal space-y-1 pl-4">
+                <li>Open this site in Chrome.</li>
+                <li>Tap the menu (⋮).</li>
+                <li>Select “Install app” (or “Add to Home screen”).</li>
+              </ol>
+            </div>
+            <div className="opacity-80">
+              Tip: once installed, Focus runs fullscreen and notifications work more reliably.
+            </div>
+          </div>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button aria-label="Close" />
+        </form>
+      </dialog>
     </header>
   );
 };

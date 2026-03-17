@@ -5,7 +5,11 @@ import type { Theme } from '../constants';
 import type { Task } from '../types';
 import { useTimer } from '../hooks/useTimer';
 import { useWakeLock } from '../hooks/useWakeLock';
-import { playAlarmSound } from '../utils/sound';
+import { playAlarmSound, prepareAlarmSound } from '../utils/sound';
+import {
+  requestTimerNotificationPermission,
+  showTimerFinishedNotification,
+} from '../utils/notifications';
 import CircularTimer from './CircularTimer';
 
 type TaskTimerProps = {
@@ -38,6 +42,7 @@ export default function TaskTimer({
     if (!hasPlayedSound.current) {
       hasPlayedSound.current = true;
       playAlarmSound();
+      void showTimerFinishedNotification();
     }
   };
 
@@ -47,6 +52,22 @@ export default function TaskTimer({
   });
 
   useWakeLock(timer.isRunning);
+
+  const startOrResume = async () => {
+    await prepareAlarmSound();
+    await requestTimerNotificationPermission();
+    if (timer.remainingMs > 0) {
+      timer.resume();
+    } else {
+      timer.start();
+    }
+  };
+
+  const handleReset = async () => {
+    await prepareAlarmSound();
+    await requestTimerNotificationPermission();
+    timer.reset();
+  };
 
   useEffect(() => {
     if (autoStart) {
@@ -102,7 +123,7 @@ export default function TaskTimer({
           <button
             type="button"
             className="btn btn-circle"
-            onClick={timer.remainingMs > 0 ? timer.resume : timer.start}
+            onClick={startOrResume}
             aria-label="Play"
           >
             <PlayIcon />
@@ -127,7 +148,7 @@ export default function TaskTimer({
         <button
           type="button"
           className="btn btn-circle"
-          onClick={timer.reset}
+          onClick={handleReset}
           aria-label="Reset"
         >
           <ResetIcon />

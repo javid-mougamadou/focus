@@ -6,6 +6,14 @@ import './index.css';
 
 // void initGA();
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').catch(() => {
+      // ignore: offline / unsupported / blocked
+    });
+  });
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
